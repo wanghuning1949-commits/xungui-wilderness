@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>这一页不在档案里 · 寻归荒野</title>
+<link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2efe3">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a241e">
+<style>
+:root{
+  color-scheme:light;
+  --paper:#f2efe3; --ink:#23322a; --ink-soft:#485a4c; --muted:#5c6e5c;
+  --line:#cfc8b4; --cinnabar:#a3483a; --card:#f8f5ea;
+  --btn:#2f4536; --btn-hover:#46653f; --btn-ink:#f7f3e6;
+  --ease:cubic-bezier(.32,.72,0,1);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme:dark;
+    --paper:#1a241e; --ink:#ece6d6; --ink-soft:#c4c0ae; --muted:#a7b0a2;
+    --line:#3c4a3e; --cinnabar:#d08a7c; --card:#202d25;
+    --btn:#a9c79b; --btn-hover:#bcd4ad; --btn-ink:#16211a;
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; min-height:100dvh;
+  display:grid; place-items:center;
+  padding:calc(24px + env(safe-area-inset-top)) calc(20px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left));
+  background-color:var(--paper); background-image:var(--grain);
+  color:var(--ink); letter-spacing:.012em;
+  font-family:"Noto Serif SC","Songti SC","Source Han Serif SC","SimSun",serif;
+  -webkit-font-smoothing:antialiased;
+}
+main{
+  position:relative; width:min(520px,100%);
+  padding:clamp(34px,6vw,52px) clamp(24px,5vw,44px) clamp(28px,5vw,36px);
+  border:1px solid var(--line); border-radius:3px;
+  background:var(--card); background-image:var(--grain);
+  box-shadow:0 1px 0 rgba(35,50,42,.05), 0 24px 60px rgba(35,50,42,.07);
+  text-align:center;
+}
+main::before{
+  content:""; position:absolute; inset:6px; pointer-events:none;
+  border:1px solid var(--line); opacity:.45; border-radius:1px;
+}
+.seal{
+  position:absolute; top:18px; right:18px; width:42px; height:42px;
+  display:grid; place-items:center; transform:rotate(-7deg);
+  border:2px solid var(--cinnabar); border-radius:2px;
+  color:var(--cinnabar); font-size:20px; line-height:1; opacity:.85;
+}
+.kicker{
+  margin:0 0 18px; color:var(--muted);
+  font-size:12px; letter-spacing:.24em; text-indent:.24em;
+}
+h1{
+  margin:0 0 14px; font-size:clamp(26px,5vw,34px); font-weight:700;
+  line-height:1.4; letter-spacing:.02em; text-wrap:balance;
+}
+p{
+  margin:0 auto 28px; max-width:27em; color:var(--ink-soft);
+  font-size:14.5px; line-height:1.95; text-wrap:pretty;
+}
+.rule{height:1px; margin:0 0 24px; background:var(--line); opacity:.75;}
+a{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:44px; padding:12px 26px; border:1px solid var(--btn); border-radius:2px;
+  background:var(--btn); color:var(--btn-ink);
+  font-family:inherit; font-size:14px; font-weight:600; letter-spacing:.08em;
+  text-decoration:none;
+  transition:background var(--dur,200ms) var(--ease), transform var(--dur,200ms) var(--ease);
+}
+a:hover{background:var(--btn-hover); border-color:var(--btn-hover); transform:translateY(-1px);}
+a:active{transform:translateY(1px);}
+a:focus-visible{outline:3px solid var(--cinnabar); outline-offset:3px;}
+.small{margin:20px 0 0; font-size:12px; line-height:1.8; letter-spacing:.06em; color:var(--muted);}
+.small span{display:block;}
+@media (max-width:400px){
+  main{padding-top:36px;}
+  .seal{top:13px; right:13px; width:36px; height:36px; font-size:17px;}
+  .kicker{padding-right:30px; text-align:left;}
+  h1{text-align:left;}
+  p{text-align:left;}
+  a{width:100%;}
+}
+@media (prefers-reduced-motion:reduce){a{transition:none;}}
+</style>
+</head>
+<body>
+<main>
+  <div class="seal" aria-hidden="true">缺</div>
+  <p class="kicker">档案缺页 · 404</p>
+  <h1>这一页不在档案里</h1>
+  <p>你打开的地址没有对应的记录。可能是链接写错了，也可能是这份档案只保留从封面开始的那一条路。</p>
+  <div class="rule"></div>
+  <a href="./">回到档案首页</a>
+  <p class="small"><span>《寻归荒野》· 历史启发式政治叙事</span><span>档案 404 · 一九七四—二〇二三</span></p>
+</main>
+</body>
+</html>

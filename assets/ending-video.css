@@ -1,0 +1,209 @@
+/* ============================================================
+   寻归荒野 · 结局彩蛋视频播放器样式（.xgegv- 前缀，独立作用域）
+   层级：低于启动画面(2147483647)与公告(2147483000)，高于音乐库(9500)
+   ============================================================ */
+
+/* ---------- 结局页上的彩蛋入口（.eggbelt 属于结局卡片，不是弹层） ---------- */
+.eggbelt {
+  max-width: 640px; margin: 0 auto 22px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.btn.egg {
+  background: #a83d35;
+  border-color: rgba(140, 45, 40, .35);
+  box-shadow: 0 8px 18px rgba(150, 50, 44, .2);
+}
+.btn.egg:hover {
+  background: #bb4a3e;
+  box-shadow: 0 12px 24px rgba(150, 50, 44, .26);
+}
+.eggtip { font-size:12px; color: var(--muted); line-height: 1.75; max-width: 34em; }
+@media (max-width: 560px) { .eggtip { font-size:12px; } }
+
+.xgegv { position: fixed; inset: 0; z-index: var(--z-video, 9600); display: grid; place-items: center; }
+.xgegv[hidden] { display: none; }
+.xgegv-mask {
+  position: absolute; inset: 0;
+  background: rgba(14, 22, 16, .62);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  opacity: 0; transition: opacity var(--dur-mid, 240ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.xgegv.xgegv-in .xgegv-mask { opacity: 1; }
+body.xgegv-lock { overflow: hidden; }
+
+.xgegv-panel {
+  position: relative;
+  width: var(--xgegv-w, 660px); max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  max-height: calc(100dvh - 16px);
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex; flex-direction: column;
+  background: #fbfaf3; border: 1px solid #d8ddcf; border-radius: 18px;
+  box-shadow: 0 30px 70px rgba(10, 18, 12, .45);
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  color: #243b30;
+  transform: translateY(10px) scale(.985); opacity: 0;
+  transition: transform var(--dur-mid, 240ms) var(--ease, cubic-bezier(.32,.72,0,1)), opacity var(--dur-mid, 240ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.xgegv.xgegv-in .xgegv-panel { transform: none; opacity: 1; }
+.xgegv-panel.xgegv-free { width: auto; height: auto; }
+.xgegv-panel.xgegv-full { width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh;
+  width: 100dvw; max-width: 100dvw; height: 100dvh; max-height: 100dvh; border-radius: 0; border: 0; }
+
+/* ---------- 头部 ---------- */
+.xgegv-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid #e4e8dd;
+}
+.xgegv-title {
+  font-size: 14px; font-weight: 700; letter-spacing: .02em;
+  flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.xgegv-head-tools { display: flex; align-items: center; gap: 6px; }
+.xgegv-btn {
+  display: inline-grid; place-items: center;
+  min-width: 34px; height: 34px; padding: 0 8px;
+  border: 1px solid transparent; border-radius: 9px;
+  background: transparent; color: #4a6151; cursor: pointer;
+  font-family: inherit; font-size: 12.5px; font-weight: 700; line-height: 1;
+  transition: background var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), color var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), transform var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.xgegv-btn svg { width: 16px; height: 16px; display: block; }
+.xgegv-btn:hover { background: #eaf0e4; color: #2f6b3f; }
+.xgegv-btn:active { transform: scale(.94); }
+.xgegv-close:hover { background: #fbe9e7; color: #b3372c; }
+.xgegv-btn:focus-visible, .xgegv-timeline:focus-visible, .xgegv-vol:focus-visible { outline: 3px solid rgba(127,180,111,.6); outline-offset: 2px; }
+
+/* ---------- 画面区 ---------- */
+.xgegv-stage { position: relative; flex: 1 1 auto; min-height: 0; background: #0b120d; }
+.xgegv-video { display: block; width: 100%; height: 100%; max-height: calc(100vh - 148px); max-height: calc(100dvh - 148px); background: #0b120d; object-fit: contain; }
+.xgegv-panel.xgegv-full .xgegv-video { max-height: none; }
+.xgegv-resize {
+  position: absolute; right: 4px; bottom: 4px; width: 22px; height: 22px;
+  cursor: nwse-resize; touch-action: none; z-index: 3;
+  background:
+    linear-gradient(135deg, transparent 0 55%, rgba(255,255,255,.55) 55% 62%, transparent 62% 70%, rgba(255,255,255,.55) 70% 77%, transparent 77% 85%, rgba(255,255,255,.55) 85% 92%, transparent 92%);
+  border-radius: 4px;
+}
+.xgegv-panel.xgegv-full .xgegv-resize { display: none; }
+.xgegv-loading { position: absolute; inset: 0; display: grid; grid-auto-flow: column; place-content: center; gap: 7px; background: rgba(11,18,13,.35); }
+.xgegv-loading[hidden] { display: none; }
+.xgegv-loading span { width: 9px; height: 9px; border-radius: 50%; background: #9dc08f; animation: xgegvDot 1s infinite ease-in-out; }
+.xgegv-loading span:nth-child(2) { animation-delay: .16s; }
+.xgegv-loading span:nth-child(3) { animation-delay: .32s; }
+@keyframes xgegvDot { 0%, 80%, 100% { transform: scale(.6); opacity: .5; } 40% { transform: scale(1); opacity: 1; } }
+
+/* ---------- 控件条 ---------- */
+.xgegv-ctrls { padding: 8px 12px 10px; border-top: 1px solid #e4e8dd; background: #f6f5ea; border-radius: 0 0 17px 17px; }
+.xgegv-track { position: relative; height: 20px; }
+.xgegv-buffer, .xgegv-played { position: absolute; left: 0; right: 0; top: 8px; height: 4px; border-radius: 99px; pointer-events: none; }
+.xgegv-buffer { background: #dfe4d6; }
+.xgegv-buffer-fill { height: 100%; width: 0; border-radius: 99px; background: #c3d3b6; }
+.xgegv-played { right: auto; background: #4f8a52; width: 0; }
+.xgegv-played-tip {
+  position: absolute; top: -22px; left: 0; transform: translateX(-50%);
+  padding: 2px 6px; border-radius: 6px; background: #2b3d31; color: #f4f7ef;
+  font-size:12px; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.xgegv-played-tip[hidden] { display: none; }
+.xgegv-timeline {
+  position: absolute; inset: 0; width: 100%; height: 20px; margin: 0;
+  -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer;
+}
+.xgegv-timeline::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 13px; height: 13px; border-radius: 50%; background: #3f7a45; border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(20, 40, 20, .35);
+}
+.xgegv-timeline::-moz-range-thumb {
+  width: 13px; height: 13px; border-radius: 50%; background: #3f7a45; border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(20, 40, 20, .35);
+}
+.xgegv-row { display: flex; align-items: center; gap: 4px; }
+.xgegv-time { font-size: 12px; color: #5b7160; font-variant-numeric: tabular-nums; margin-left: 4px; }
+.xgegv-time b { color: #2c4634; font-weight: 700; }
+.xgegv-spacer { flex: 1 1 auto; }
+.xgegv-vol {
+  width: 74px; height: 18px; margin: 0;
+  -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer;
+}
+.xgegv-vol::-webkit-slider-runnable-track { height: 4px; border-radius: 99px; background: #d3dbc8; }
+.xgegv-vol::-webkit-slider-thumb { -webkit-appearance: none; margin-top: -5px; width: 13px; height: 13px; border-radius: 50%; background: #4f8a52; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(20,40,20,.3); }
+.xgegv-vol::-moz-range-track { height: 4px; border-radius: 99px; background: #d3dbc8; }
+.xgegv-vol::-moz-range-thumb { width: 13px; height: 13px; border: 2px solid #fff; border-radius: 50%; background: #4f8a52; }
+.xgegv-speed { min-width: 40px; }
+
+/* ---------- 提示条 ---------- */
+.xgegv-hint {
+  margin: 0 12px 10px; padding: 8px 11px; border-radius: 10px;
+  background: #fdf3e2; border: 1px solid #f0dcb4; color: #7a5a20;
+  font-size: 12.5px; line-height: 1.6;
+}
+.xgegv-hint[hidden] { display: none; }
+
+/* ---------- 暗色模式 ---------- */
+@media (prefers-color-scheme: dark) {
+  .xgegv-panel { background: #1c2b21; border-color: #2f4736; color: #e8f0e4; }
+  .xgegv-head { border-bottom-color: #2f4736; }
+  .xgegv-btn { color: #a9c1a8; }
+  .xgegv-btn:hover { background: #2b4533; color: #d8ead0; }
+  .xgegv-title { color: #e8f0e4; }
+  .xgegv-ctrls { background: #17251b; border-top-color: #2f4736; }
+  .xgegv-buffer { background: #2c3d31; }
+  .xgegv-buffer-fill { background: #3d5543; }
+  .xgegv-played { background: #7fb46f; }
+  .xgegv-timeline::-webkit-slider-thumb { background: #7fb46f; border-color: #16221a; }
+  .xgegv-timeline::-moz-range-thumb { background: #7fb46f; border-color: #16221a; }
+  .xgegv-time { color: #93ab97; }
+  .xgegv-time b { color: #dcecd8; }
+  .xgegv-vol::-webkit-slider-runnable-track { background: #34463a; }
+  .xgegv-vol::-webkit-slider-thumb { background: #7fb46f; border-color: #16221a; }
+  .xgegv-vol::-moz-range-track { background: #34463a; }
+  .xgegv-vol::-moz-range-thumb { background: #7fb46f; border-color: #16221a; }
+  .xgegv-hint { background: #2f2b1c; border-color: #4a4227; color: #e2cf9f; }
+}
+
+/* ---------- 小屏 ---------- */
+@media (max-width: 560px) {
+  .xgegv-panel { border-radius: 14px; }
+  .xgegv-ctrls { padding: 6px 9px 8px; }
+  .xgegv-video { max-height: calc(100vh - 132px); max-height: calc(100dvh - 132px); }
+  .xgegv-time { display: none; }
+  .xgegv-vol { width: 54px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xgegv-mask, .xgegv-panel, .xgegv-btn { transition: none !important; }
+  .xgegv-loading span { animation: none !important; opacity: .8; }
+}
+
+/* ============================================================
+   2026-10 · 纸质档案同款：播放器外壳做成一张深色衬纸
+   视频画面与所有控件尺寸、快捷键、拖拽逻辑都不动。
+   ============================================================ */
+.xgegv-panel {
+  border-radius:3px; border-color:#cfc8b4; background:#f8f5ea; color:#23322a;
+  font-family:"Noto Serif SC","Songti SC","Source Han Serif SC","SimSun",serif;
+  box-shadow:0 30px 70px rgba(10,18,12,.45);
+}
+.xgegv-head { border-bottom-color:#cfc8b4; padding:13px 16px 11px; }
+.xgegv-title { font-size:13.5px; font-weight:600; letter-spacing:.1em; }
+.xgegv-btn { border-radius:2px; color:#4a5a4c; }
+.xgegv-btn:hover { background:rgba(70,100,70,.08); color:#46653f; }
+.xgegv-close:hover { background:rgba(163,72,58,.1); color:#a3483a; }
+.xgegv-btn:focus-visible, .xgegv-timeline:focus-visible, .xgegv-vol:focus-visible { outline-color:rgba(163,72,58,.55); }
+.xgegv-ctrls { background:#f5f2e6; border-top-color:#cfc8b4; border-radius:0 0 2px 2px; }
+.xgegv-time { border-radius:2px; }
+.xgegv-played { background:#46653f; }
+.xgegv-hint { border-radius:2px; background:#f6f1e0; border-color:#e2d6b4; color:#6f5320; }
+@media (prefers-color-scheme: dark) {
+  .xgegv-panel { background:#202d25; border-color:#3c4a3e; color:#ece6d6; }
+  .xgegv-head { border-bottom-color:#3c4a3e; }
+  .xgegv-btn { color:#c4c0ae; }
+  .xgegv-btn:hover { background:rgba(169,199,155,.1); color:#ece6d6; }
+  .xgegv-close:hover { background:rgba(208,138,124,.12); color:#d08a7c; }
+  .xgegv-ctrls { background:#1a241e; border-top-color:#3c4a3e; }
+  .xgegv-played { background:#a9c79b; }
+  .xgegv-hint { background:#2b2a1d; border-color:#4a4227; color:#e2cf9f; }
+}

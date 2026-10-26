@@ -1,0 +1,393 @@
+/* ============================================================
+   寻归荒野 · 音乐库悬浮组件
+   独立作用域样式（.music-lib / .mlp- 前缀），不与页面其他模块冲突。
+   层级策略：
+   - 启动画面 #xg-splash: z-index 2147483647（最高，独占屏幕）
+   - 公告弹窗 .announce-overlay: z-index 2147483000
+   - 音乐悬浮按钮/面板: z-index 9500  → 不会盖住启动画面与公告
+   - 冷启动期间 body.xg-startup-active 会隐藏启动图以外的元素，
+     量产的悬浮按钮与面板同为 body 直接子元素，因此自动被隐藏。
+   ============================================================ */
+
+.music-lib-fab {
+  /* 刘海/圆角屏幕上不要贴死边缘：默认位置加上安全区。拖动过后由 JS 用 px 定位，不受这里影响。 */
+  position: fixed; right: calc(20px + env(safe-area-inset-right)); top: calc(20px + env(safe-area-inset-top)); z-index: var(--z-music, 9500);
+  width: 48px; height: 48px; padding: 0; border-radius: 50%;
+  border: 1px solid rgba(221, 0, 27, .35);
+  background: #ffffff;
+  color: #fff; cursor: pointer;
+  display: grid; place-items: center;
+  box-shadow: 0 10px 26px rgba(194, 12, 12, .26);
+  transition: transform var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), box-shadow var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.music-lib-fab.dragging { transition: none; cursor: grabbing; }
+body.mlp-dragging { cursor: grabbing; user-select: none; -webkit-user-select: none; }
+.music-lib-fab:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 14px 32px rgba(194,12,12,.36); }
+.music-lib-fab:active { transform: translateY(0) scale(.95); }
+.music-lib-fab img.icn-ncm { width: 27px; height: 27px; display: block; pointer-events: none; }
+.music-lib-fab svg { width: 23px; height: 23px; display: block; }
+.music-lib-fab::after {
+  content: ""; position: absolute; inset: -5px; border-radius: 50%;
+  border: 2px solid rgba(236, 65, 65, .6);
+  opacity: 0; pointer-events: none;
+}
+.music-lib-fab.playing::after { opacity: 1; animation: musicLibPulse 2s ease-out infinite; }
+@keyframes musicLibPulse {
+  0%   { transform: scale(.96); opacity: .85; }
+  70%  { transform: scale(1.22); opacity: 0; }
+  100% { transform: scale(1.22); opacity: 0; }
+}
+/* 网易云风格的音符图标在面板标题里保留品牌红 */
+.mlp-title svg.icn-netease-note { color: #ec4141; fill: currentColor; }
+
+.music-lib-panel {
+  position: fixed; right: calc(20px + env(safe-area-inset-right)); bottom: calc(82px + env(safe-area-inset-bottom)); z-index: var(--z-music, 9500);
+  width: min(306px, calc(100vw - 40px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+  border: 1px solid #dbe4d4; border-radius: 22px;
+  background: rgba(255, 255, 250, .96);
+  color: #243b30;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  box-shadow: 0 24px 62px rgba(25, 42, 30, .24);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  padding: 16px 16px 14px;
+  opacity: 0; transform: translateY(10px) scale(.97);
+  transform-origin: bottom right;
+  pointer-events: none;
+  /* 收起时把面板从 Tab 序列里也拿掉：原来只有 opacity:0 + pointer-events:none，
+     鼠标点不到，但键盘 Tab 会一路走进这个看不见的面板（13 个按钮）。
+     visibility:hidden 是各浏览器通用的兜底，inert 在 JS 里再补一层。 */
+  visibility: hidden;
+  transition: opacity var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), transform var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), visibility 0s linear var(--dur-fast, 200ms);
+}
+.music-lib-panel.open { opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition: opacity var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), transform var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), visibility 0s; }
+@media (prefers-color-scheme: dark) {
+  .music-lib-panel {
+    background: rgba(27, 42, 33, .96);
+    color: #edf2e7; border-color: #3e5845;
+  }
+}
+
+.mlp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.mlp-head-right { display: flex; align-items: center; gap: 2px; }
+.mlp-title {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13.5px; font-weight: 750; letter-spacing: .04em;
+}
+.mlp-title svg { width: 15px; height: 15px; color: #5f8a52; }
+.mlp-tabs { display: flex; gap: 6px; margin-bottom: 9px; }
+.mlp-tab {
+  flex: 1 1 auto; border: 1px solid #dbe4d4; border-radius: 999px;
+  background: transparent; color: #657864; cursor: pointer;
+  font-family: inherit; font-size:12px; font-weight: 600; line-height: 1;
+  padding: 7px 10px; text-align: center;
+  transition: background var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), color var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), border-color var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.mlp-tab:hover { background: #eaf1e4; color: #38543c; }
+.mlp-tab.on { background: #5c8457; border-color: transparent; color: #fffdf6; }
+@media (prefers-color-scheme: dark) {
+  .mlp-tab { border-color: #3e5845; color: #aabbab; }
+  .mlp-tab:hover { background: #2b4533; color: #dbead0; }
+}
+.mlp-search { display: flex; gap: 6px; margin-bottom: 9px; }
+.mlp-search-input {
+  flex: 1 1 auto; min-width: 0;
+  border: 1px solid #dbe4d4; border-radius: 999px;
+  background: rgba(255,255,255,.7); color: #243b30;
+  font-family: inherit; font-size: 12.5px; line-height: 1.2;
+  padding: 8px 13px; outline: none;
+  transition: border-color var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), box-shadow var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.mlp-search-input:focus { border-color: #5c8457; box-shadow: 0 0 0 3px rgba(111,154,99,.22); }
+.mlp-search-input::placeholder { color: #5d6f5a; }
+.mlp-go {
+  flex: 0 0 auto; border: 0; border-radius: 999px; cursor: pointer;
+  background: #5c8457; color: #fffdf6; font-family: inherit;
+  display: grid; place-items: center; padding: 8px 11px;
+  transition: filter var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), transform var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.mlp-go:hover { filter: brightness(1.06); }
+.mlp-go:active { transform: scale(.94); }
+.mlp-go svg { width: 14px; height: 14px; display: block; }
+@media (prefers-color-scheme: dark) {
+  .mlp-search-input { background: rgba(20,32,25,.5); color: #edf2e7; border-color: #3e5845; }
+  .mlp-search-input::placeholder { color: #7e9480; }
+}
+.mlp-status {
+  margin: 0 0 8px; padding: 7px 11px;
+  border-radius: 11px; background: #eef3e8;
+  color: #557b4d; font-size:12px; line-height: 1.5;
+}
+@media (prefers-color-scheme: dark) {
+  .mlp-status { background: #2b4533; color: #aecfa4; }
+}
+/* 缩放/关闭按钮：字号只有 13–19px，手指点不中。给它们 30×30 的稳定点击区，
+   图标本身尺寸不变，只把可点区域撑开（grid 居中，视觉位置不动）。 */
+.mlp-close, .mlp-zoom {
+  border: 0; background: none; cursor: pointer; color: #5d6f5a;
+  display: grid; place-items: center; font-family: inherit;
+  min-width: 34px; min-height: 34px; padding: 2px 6px; border-radius: 9px;
+}
+.mlp-close { font-size: 19px; }
+.mlp-zoom { padding: 3px; font-size: 15px; font-weight: 700; line-height: 1; }
+.mlp-zoom:disabled { color: #b7c3b0; background: transparent; cursor: default; }
+.mlp-zoom svg { width: 13px; height: 13px; }
+.mlp-close:hover, .mlp-zoom:not(:disabled):hover { color: #5f8a52; background: #e9f0e3; }
+@media (prefers-color-scheme: dark) {
+  .mlp-close, .mlp-zoom { color: #8a9a84; }
+  .mlp-close:hover, .mlp-zoom:not(:disabled):hover { background: #2b4533; color: #c9dcbe; }
+  .mlp-zoom:disabled { color: #58685a; }
+}
+
+.mlp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 218px; overflow-y: auto; overscroll-behavior: contain; }
+.mlp-list li { display: flex; align-items: stretch; gap: 4px; }
+.mlp-list button.mlp-heart {
+  width: auto; flex: 0 0 auto; align-self: center;
+  border: 1px solid transparent; border-radius: 9px;
+  background: none; color: #5d6f5a; cursor: pointer; font-family: inherit;
+  display: grid; place-items: center; padding: 8px; min-width: 34px; min-height: 34px;
+  transition: color var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), background var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.mlp-list button.mlp-heart svg { width: 13px; height: 13px; display: block; }
+.mlp-list button.mlp-heart:hover { color: #5f8a52; background: #e9f0e3; }
+.mlp-list button.mlp-heart.on { color: #5f8a52; }
+@media (prefers-color-scheme: dark) {
+  .mlp-list button.mlp-heart { color: #8ba187; }
+  .mlp-list button.mlp-heart:hover { color: #aecfa4; background: #2b4533; }
+  .mlp-list button.mlp-heart.on { color: #aecfa4; }
+}
+.mlp-list button.mlp-row {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  border: 1px solid transparent; border-radius: 13px;
+  background: transparent; color: inherit;
+  font-family: inherit; font-size: 13px; line-height: 1.5; text-align: left;
+  padding: 9px 11px; cursor: pointer;
+  transition: background var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), border-color var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.mlp-list button.mlp-row:hover { background: #eaf1e4; }
+@media (prefers-color-scheme: dark) {
+  .mlp-list button.mlp-row:hover { background: #2b4533; }
+}
+.mlp-list li.active button.mlp-row { background: #e4eeda; border-color: #b9d1ab; font-weight: 700; }
+@media (prefers-color-scheme: dark) {
+  .mlp-list li.active button.mlp-row { background: #2e4a36; border-color: #4d7355; }
+}
+.mlp-main { flex: 1 1 auto; min-width: 0; display: block; }
+.mlp-name {
+  display: block; flex: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mlp-sub {
+  display: block; margin-top: 1px;
+  font-size:12px; line-height: 1.3; color: #5d6f5d;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@media (prefers-color-scheme: dark) { .mlp-sub { color: #8ba187; } }
+.mlp-num {
+  flex: 0 0 auto; min-width: 24px; height: 24px;
+  display: grid; place-items:center; border-radius: 8px;
+  font: 700 12px/1 ui-monospace, monospace;
+  background: #e5eedd; color: #557b4d;
+}
+@media (prefers-color-scheme: dark) {
+  .mlp-num { background: #334f3a; color: #aecfa4; }
+}
+.mlp-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mlp-eq { flex: 0 0 auto; display: none; align-items: flex-end; gap: 2.5px; height: 12px; }
+.mlp-list li.active .mlp-eq { display: inline-flex; }
+.mlp-eq i { width: 3px; border-radius: 2px; background: #557b4d; height: 100%; }
+@media (prefers-color-scheme: dark) { .mlp-eq i { background: #aecfa4; } }
+.mlp-eq i { animation: musicLibEq .9s ease-in-out infinite; }
+.mlp-eq i:nth-child(2) { animation-delay: .22s; }
+.mlp-eq i:nth-child(3) { animation-delay: .44s; }
+.mlp-list li.active:not(.paused) .mlp-eq i { animation-play-state: running; }
+.mlp-list li.active.paused .mlp-eq i { animation-play-state: paused; }
+@keyframes musicLibEq {
+  0%, 100% { transform: scaleY(.35); }
+  50%      { transform: scaleY(1); }
+}
+
+.mlp-progress { display: flex; align-items: center; gap: 9px; margin-top: 13px; }
+.mlp-time {
+  flex: 0 0 auto; font: 600 12px/1.2 ui-monospace, monospace;
+  color: #5d6f5d; font-variant-numeric: tabular-nums;
+}
+@media (prefers-color-scheme: dark) { .mlp-time { color: #aabbab; } }
+.mlp-track {
+  position: relative; flex: 1 1 auto; height: 6px; border-radius: 99px;
+  background: #dde6d5; cursor: pointer; touch-action: none;
+}
+/* 6px 的进度条手指很难点准：向上下各扩 8px 透明点击区，视觉粗细不变。 */
+.mlp-track::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; bottom: -8px; }
+@media (prefers-color-scheme: dark) { .mlp-track { background: #3a5241; } }
+.mlp-fill {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
+  border-radius: 99px;
+  background: #5c8457;
+}
+.mlp-inner {
+  position: absolute; right: -5px; top: 50%; width: 10px; height: 10px;
+  border-radius: 50%; background: #4d7451;
+  border: 2px solid #fbfcf5; box-shadow: 0 1px 4px rgba(25,42,30,.3);
+  transform: translateY(-50%); opacity: 0; transition: opacity var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.mlp-track:hover .mlp-inner, .mlp-track.dragging .mlp-inner { opacity: 1; }
+@media (prefers-color-scheme: dark) { .mlp-inner { border-color: #2a3f30; } }
+
+.mlp-controls { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 13px; }
+.mlp-btn {
+  border: 0; background: none; cursor: pointer;
+  color: #4a6a54; padding: 6px; border-radius: 50%;
+  display: grid; place-items: center; font-family: inherit;
+  min-width: 36px; min-height: 36px;
+  transition: color var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), transform var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1)), background var(--dur-fast, 200ms) var(--ease, cubic-bezier(.32,.72,0,1));
+}
+.mlp-btn:hover { color: #38543c; background: #e9f0e3; }
+.mlp-btn:active { transform: scale(.92); }
+@media (prefers-color-scheme: dark) {
+  .mlp-btn { color: #b9d1ab; }
+  .mlp-btn:hover { background: #2b4533; color: #dbead0; }
+}
+.mlp-btn svg { width: 19px; height: 19px; display: block; }
+.mlp-toggle {
+  width: 44px; height: 44px;
+  background: #5c8457; color: #fffdf6;
+  box-shadow: 0 7px 18px rgba(66, 107, 73, .35);
+}
+.mlp-toggle:hover { color: #fffdf6; filter: brightness(1.06); }
+.mlp-toggle .icn-pause { display: none; }
+.mlp-toggle.playing .icn-play { display: none; }
+.mlp-toggle.playing .icn-pause { display: block; }
+
+.mlp-volume { display: flex; align-items: center; gap: 9px; margin-top: 12px; }
+.mlp-volume svg { flex: 0 0 auto; width: 15px; height: 15px; color: #7a8a77; }
+@media (prefers-color-scheme: dark) { .mlp-volume svg { color: #aabbab; } }
+.mlp-volume input[type="range"] {
+  /* 元素盒子里给到 16px 高，滑条本身仍由系统画成细轨（accent-color 决定颜色），
+     4px 的盒子在手机上几乎点不中，扩到 16px 只是让命中区变大，视觉粗细不变。 */
+  flex: 1 1 auto; height: 16px; margin: 0; padding: 0;
+  accent-color: #5f8a52; cursor: pointer; background: transparent;
+}
+@media (max-width: 420px) { .mlp-volume input[type="range"] { height: 20px; } }
+.mlp-vol-label {
+  flex: 0 0 auto; font: 600 12px/1 ui-monospace, monospace;
+  color: #5d6f5d; min-width: 26px; text-align: right;
+}
+@media (prefers-color-scheme: dark) { .mlp-vol-label { color: #aabbab; } }
+
+.mlp-footnote {
+  margin: 12px 0 0; text-align: center;
+  font-size:12px; letter-spacing: .05em; color: #667861;
+}
+@media (prefers-color-scheme: dark) { .mlp-footnote { color: #7e9480; } }
+
+@media (max-width: 420px) {
+  .music-lib-fab { right: calc(14px + env(safe-area-inset-right)); top: calc(14px + env(safe-area-inset-top)); width: 44px; height: 44px; }
+  .music-lib-fab img.icn-ncm { width: 25px; height: 25px; }
+  .music-lib-fab svg { width: 19px; height: 19px; }
+  .music-lib-panel { right: calc(10px + env(safe-area-inset-right)); bottom: calc(68px + env(safe-area-inset-bottom)); width: min(292px, calc(100vw - 20px - env(safe-area-inset-left) - env(safe-area-inset-right))); padding: 14px 13px 12px; }
+  .music-lib-panel[style*="left"] { max-width: calc(100vw - 16px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-lib-fab, .music-lib-panel, .mlp-list button,
+  .mlp-btn, .mlp-inner, .mlp-eq i { animation: none !important; transition: none !important; }
+  .music-lib-fab.playing::after { animation: none; opacity: .5; }
+}
+
+/* 键盘焦点：音乐库是自己画的控件，浏览器默认焦点环被平铺色块盖住，这里统一补上。 */
+.music-lib-fab:focus-visible,
+.mlp-tab:focus-visible, .mlp-search-input:focus-visible, .mlp-go:focus-visible,
+.mlp-close:focus-visible, .mlp-zoom:focus-visible, .mlp-heart:focus-visible,
+.mlp-row:focus-visible, .mlp-btn:focus-visible {
+  outline: 3px solid rgba(98, 146, 82, .55); outline-offset: 2px;
+}
+
+/* 触控屏：34px 的点击区对拇指仍偏小，统一撑到 44×44（图标本身尺寸不变）。
+   设置页也加载这份样式，所以规则放在这里而不是只写在首页的覆盖层。 */
+@media (pointer: coarse) {
+  .mlp-close, .mlp-zoom, .mlp-list button.mlp-heart { min-width: 44px; min-height: 44px; }
+}
+
+/* ============================================================
+   2026-10 · 纸质档案同款：音乐库也做成一张夹在页边的纸条
+   只覆盖颜色、圆角、字与分隔，不动尺寸、拖动、缩放与点击区。
+   ============================================================ */
+.music-lib-panel {
+  border-color:#cfc8b4; border-radius:3px;
+  background:#f8f5ea; background-image:url("ink/paper.webp");
+  color:#23322a;
+  font-family:"Noto Serif SC","Songti SC","Source Han Serif SC","SimSun",serif;
+  box-shadow:0 26px 60px rgba(35,50,42,.2);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  padding:18px 17px 15px;
+}
+.mlp-title { font-size:13px; font-weight:600; letter-spacing:.16em; }
+.mlp-title svg { color:#a3483a; }
+.mlp-tab {
+  border-color:#cfc8b4; border-radius:2px; color:#4a5a4c;
+  font-size:12px; letter-spacing:.08em; padding:8px 10px;
+}
+.mlp-tab:hover { background:rgba(70,100,70,.06); color:#46653f; }
+.mlp-tab.on { background:#2f4536; border-color:#2f4536; color:#f7f3e6; }
+.mlp-search-input {
+  border-color:#cfc8b4; border-radius:2px; background:#fffdf4; color:#23322a;
+  font-size:12.5px; padding:9px 12px;
+}
+.mlp-search-input:focus { border-color:#46653f; box-shadow:0 0 0 3px rgba(70,101,63,.16); }
+.mlp-search-input::placeholder { color:#6b7a68; }
+.mlp-go { border-radius:2px; background:#2f4536; color:#f7f3e6; }
+.mlp-status { border-radius:2px; background:rgba(70,100,70,.07); color:#46653f; }
+.mlp-close, .mlp-zoom { border-radius:2px; color:#4a5a4c; }
+.mlp-close:hover, .mlp-zoom:not(:disabled):hover { color:#46653f; background:rgba(70,100,70,.08); }
+.mlp-list { gap:0; }
+.mlp-list button.mlp-row {
+  border-radius:0; border-bottom:1px solid rgba(207,200,180,.55);
+  font-size:13.5px; padding:10px 8px;
+}
+.mlp-list button.mlp-row:hover { background:rgba(70,100,70,.06); }
+.mlp-list li.active button.mlp-row {
+  background:rgba(70,100,70,.08); border-color:transparent;
+  box-shadow:inset 2px 0 0 #46653f;
+}
+.mlp-num {
+  min-width:21px; height:auto; border-radius:0; background:none;
+  color:#46653f; font:700 12px/1 "JetBrains Mono",ui-monospace,monospace; letter-spacing:.04em;
+}
+.mlp-eq i { background:#46653f; }
+.mlp-track { border-radius:2px; background:#ded7c4; }
+.mlp-fill { border-radius:2px; background:#46653f; }
+.mlp-inner { background:#46653f; border-color:#f8f5ea; }
+.mlp-btn { border-radius:2px; color:#4a5a4c; }
+.mlp-btn:hover { background:rgba(70,100,70,.08); color:#46653f; }
+.mlp-toggle { border-radius:2px; background:#2f4536; color:#f7f3e6; box-shadow:0 7px 18px rgba(35,50,42,.2); }
+.mlp-toggle:hover { color:#f7f3e6; background:#3a5744; filter:none; }
+.mlp-volume input[type="range"] { accent-color:#46653f; }
+.mlp-footnote { font-size:12px; letter-spacing:.1em; color:#5c6e5c; }
+@media (max-width:420px) { .music-lib-panel { padding:15px 13px 12px; } }
+@media (prefers-color-scheme: dark) {
+  .music-lib-panel { background:#202d25; border-color:#3c4a3e; color:#ece6d6; box-shadow:0 26px 60px rgba(0,0,0,.4); }
+  .mlp-title svg { color:#d08a7c; }
+  .mlp-tab { border-color:#3c4a3e; color:#c4c0ae; }
+  .mlp-tab:hover { background:rgba(169,199,155,.08); color:#ece6d6; }
+  .mlp-tab.on { background:#a9c79b; border-color:#a9c79b; color:#16211a; }
+  .mlp-search-input { background:#1a241e; border-color:#3c4a3e; color:#ece6d6; }
+  .mlp-search-input::placeholder { color:#93a38e; }
+  .mlp-go { background:#a9c79b; color:#16211a; }
+  .mlp-status { background:rgba(169,199,155,.1); color:#c9e2c0; }
+  .mlp-close, .mlp-zoom { color:#c4c0ae; }
+  .mlp-close:hover, .mlp-zoom:not(:disabled):hover { background:rgba(169,199,155,.1); color:#ece6d6; }
+  .mlp-list button.mlp-row { border-bottom-color:#3c4a3e; }
+  .mlp-list button.mlp-row:hover { background:rgba(169,199,155,.07); }
+  .mlp-list li.active button.mlp-row { background:rgba(169,199,155,.12); box-shadow:inset 2px 0 0 #a9c79b; }
+  .mlp-num { color:#a9c79b; }
+  .mlp-eq i { background:#a9c79b; }
+  .mlp-track { background:#3c4a3e; }
+  .mlp-fill { background:#a9c79b; }
+  .mlp-inner { background:#a9c79b; border-color:#202d25; }
+  .mlp-btn { color:#c4c0ae; }
+  .mlp-btn:hover { background:rgba(169,199,155,.1); color:#ece6d6; }
+  .mlp-toggle { background:#a9c79b; color:#16211a; }
+  .mlp-toggle:hover { background:#bcd4ad; color:#16211a; }
+  .mlp-volume input[type="range"] { accent-color:#a9c79b; }
+  .mlp-footnote { color:#a7b0a2; }
+}

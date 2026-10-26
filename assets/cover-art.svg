@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" role="presentation">
+  <!-- 寻归荒野 · 封面版画：四层平涂山脊 + 一条细水线 + 三只雁。
+       只用纯色与线条，不铺渐变；顶部留白让纸张本身成为天空。 -->
+  <g fill="none" stroke="#c8d4bc" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M0 214 L74 182 L142 208 L232 158 L318 204 L404 166 L492 212 L584 174 L664 206 L754 160 L842 204 L930 172 L1020 208 L1106 180 L1200 202"/>
+    <path d="M0 232 L88 204 L166 226 L264 188 L352 222 L446 192 L534 228 L630 198 L714 224 L808 188 L896 222 L986 198 L1080 226 L1160 204 L1200 218"/>
+  </g>
+
+  <path d="M0 252 L92 222 L184 248 L286 214 L386 246 L486 216 L586 250 L686 220 L786 248 L886 218 L986 250 L1086 226 L1200 248 L1200 380 L0 380 Z" fill="#dce5d3"/>
+  <path d="M0 294 L110 262 L218 290 L330 252 L442 288 L552 254 L662 292 L772 258 L882 292 L992 262 L1104 294 L1200 272 L1200 380 L0 380 Z" fill="#b7c9aa"/>
+  <path d="M0 330 L124 300 L246 328 L368 292 L490 328 L612 296 L734 332 L856 300 L978 330 L1100 302 L1200 324 L1200 380 L0 380 Z" fill="#91a987"/>
+  <path d="M0 358 L140 336 L280 360 L420 334 L560 362 L700 338 L840 362 L980 340 L1120 362 L1200 350 L1200 380 L0 380 Z" fill="#5f7c62"/>
+
+  <path d="M338 380 C420 356 470 344 556 338 C636 332 700 336 762 326 C812 318 858 312 902 306" fill="none" stroke="#f2efe3" stroke-width="3" stroke-linecap="round" opacity=".75"/>
+  <path d="M420 372 C488 356 540 348 606 342" fill="none" stroke="#f2efe3" stroke-width="1.4" stroke-linecap="round" opacity=".5"/>
+
+  <g fill="#4d6a50">
+    <path d="M148 340 l9 -30 l9 30 z M139 356 l18 -34 l18 34 z"/>
+    <path d="M205 350 l7 -24 l7 24 z M198 362 l14 -26 l14 26 z"/>
+    <path d="M968 344 l8 -27 l8 27 z M959 359 l17 -31 l17 31 z"/>
+    <path d="M1024 352 l6 -20 l6 20 z M1018 362 l12 -22 l12 22 z"/>
+  </g>
+
+  <g fill="none" stroke="#3f5a46" stroke-width="1.6" stroke-linecap="round" opacity=".55">
+    <path d="M842 92 q9 -7 18 0"/>
+    <path d="M870 78 q8 -6 16 0"/>
+    <path d="M889 100 q7 -5 14 0"/>
+  </g>
+</svg>

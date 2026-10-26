@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>全局公告设置 · 寻归荒野</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="《寻归荒野》全局公告的后台设置页，仅供站点维护者使用。">
+<link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+<meta name="theme-color" content="#eef2e7">
+<link rel="stylesheet" href="./assets/announcement.css">
+<link rel="stylesheet" href="./assets/music-player.css">
+<style>
+:root{color-scheme:light;--bg:#eef2e7;--card:rgba(255,255,249,.91);--ink:#243b30;--soft:#586e5b;--muted:#5d6f5a;--line:#d4dfce;--accent:#557b4d;--accent2:#799a6e;--shadow:0 16px 44px rgba(42,75,44,.08);--ease:cubic-bezier(.32,.72,0,1)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;min-height:100dvh;color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;background:var(--bg)}
+.page{max-width:1180px;margin:0 auto;padding:35px 24px 70px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:28px}.brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.18em;margin-bottom:8px}.brand h1{font-family:"Noto Serif SC","Songti SC",serif;font-size:clamp(26px,4vw,34px);margin:0;letter-spacing:.02em}.back{display:inline-flex;align-items:center;min-height:44px;color:var(--soft);text-decoration:none;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,249,.65);padding:10px 15px;font-size:13px;white-space:nowrap;transition:border-color var(--dur-fast,200ms) var(--ease),color var(--dur-fast,200ms) var(--ease)}.back:hover{border-color:var(--accent);color:var(--accent)}
+.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(310px,.9fr);gap:22px;align-items:start}.panel{background:var(--card);border:1px solid var(--line);border-radius:25px;box-shadow:var(--shadow);overflow:hidden}.panel-head{padding:24px 26px 19px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:17px;margin:0 0 8px}.panel-head p{font-size:12.5px;line-height:1.75;color:var(--muted);margin:0}.settings{padding:5px 26px 25px}.section{padding:21px 0;border-bottom:1px solid #e4eadf}.section:last-child{border-bottom:0}.section-title{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:13px}.section-title h3{font-size:13.5px;margin:0;letter-spacing:.01em}.desc{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.65}.switch{appearance:none;position:relative;width:45px;height:26px;border:0;border-radius:99px;background:#cbd4c6;cursor:pointer;transition:background var(--dur-fast,200ms) var(--ease);flex:0 0 auto}.switch::after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0002;transition:transform var(--dur-fast,200ms) var(--ease)}.switch:checked{background:#628b58}.switch:checked::after{transform:translateX(19px)}.switch:focus-visible{outline:3px solid #91b582;outline-offset:3px}
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.style-card{border:1px solid var(--line);padding:11px;border-radius:17px;background:#fffef8;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink);transition:border-color var(--dur-fast,200ms) var(--ease),box-shadow var(--dur-fast,200ms) var(--ease),transform var(--dur-fast,200ms) var(--ease)}.style-card[aria-pressed="true"]{border:2px solid var(--accent);padding:10px;box-shadow:0 0 0 3px #71936518}.style-card:focus-visible{outline:3px solid #91b582;outline-offset:2px}.mini{display:block;border-radius:10px;padding:11px;min-height:72px;margin-bottom:10px}.mini.light{background:#f5f7ef;color:#2d4434;border:1px solid #e0e8d9}.mini.dark{background:#1c2d22;color:#eaf0e4;border:1px solid #3c5542}.mini b{font-size:12px;display:block;margin-bottom:7px}.mini i{display:block;font-style:normal;font-size:12px;line-height:1.55;opacity:.75}.style-label{font-size:12px;font-weight:700}.style-card small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.icon-row{display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center}.icon-preview{width:58px;height:58px;border-radius:16px;border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;background:#edf3e8;color:var(--accent);font-size:25px}.icon-preview img{width:100%;height:100%;display:block;object-fit:cover}.icon-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-label,.plain-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;border:1px solid var(--line);border-radius:11px;background:#fbfcf6;color:var(--ink);padding:9px 12px;font-family:inherit;font-size:12px;font-weight:600;line-height:1.2;cursor:pointer;transition:border-color var(--dur-fast,200ms) var(--ease),color var(--dur-fast,200ms) var(--ease)}.file-label:hover,.plain-btn:hover{border-color:var(--accent);color:var(--accent)}.remove{border:0;background:none;color:#9d413a;font-family:inherit;font-size:12px;cursor:pointer;padding:7px;min-height:36px}.remove:hover{text-decoration:underline}.field-label{display:block;font-size:12px;font-weight:600;margin-bottom:9px}.input,.textarea{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px 14px;background:rgba(255,255,249,.8);color:var(--ink);font-family:inherit;font-size:14px;line-height:1.7;outline:none;transition:border-color var(--dur-fast,200ms) var(--ease),box-shadow var(--dur-fast,200ms) var(--ease)}.input:focus,.textarea:focus{border-color:#83a777;box-shadow:0 0 0 3px #83a77721}.textarea{min-height:230px;resize:vertical}.count{font-size:12px;color:var(--muted);text-align:right;margin-top:6px}.actions{display:flex;gap:10px;flex-wrap:wrap;padding-top:22px}.primary{border:0;border-radius:999px;background:#557b4d;color:#fffdf6;padding:12px 21px;min-height:44px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 7px 18px #426b4922;transition:filter var(--dur-fast,200ms) var(--ease),transform var(--dur-fast,200ms) var(--ease)}.primary:hover{filter:brightness(1.05);transform:translateY(-1px)}.secondary{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--soft);padding:11px 18px;min-height:44px;font-family:inherit;font-size:12.5px;cursor:pointer;transition:border-color var(--dur-fast,200ms) var(--ease),color var(--dur-fast,200ms) var(--ease)}.secondary:hover{border-color:var(--accent);color:var(--accent)}.notice{margin-top:17px;border:1px dashed #cbd9c4;border-radius:13px;padding:12px 14px;color:var(--muted);font-size:12px;line-height:1.8;background:#f7f8f1}.notice strong{color:var(--soft)}
+.preview-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 23px 15px}.preview-head h2{margin:0;font-size:15px}.status{border-radius:999px;background:#e5efdf;color:#456038;font-size:12px;padding:6px 10px}.status.off{background:#f6e8e2;color:#9d4f3d}.preview-body{padding:8px 23px 24px}.preview-stage{border:1px solid var(--line);border-radius:20px;min-height:370px;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;background:#edf2e7}.preview-stage.dark{background:#16231b}.preview-card{position:relative;width:100%;max-width:420px;border:1px solid #cfc8b4;border-radius:3px;background:#f4f1e4;padding:26px 24px;color:#23322a;box-shadow:0 18px 44px rgba(35,50,42,.12);font-family:"Noto Serif SC","Songti SC",serif}.preview-card::before{content:"";position:absolute;inset:5px;border:1px solid rgba(70,100,70,.13);pointer-events:none}.preview-card[data-theme="dark"]{background:#1f2a21;color:#e8efdf;border-color:#3d5945}.preview-card[data-theme="dark"]::before{border-color:rgba(232,239,223,.1)}.preview-kicker{font-size:12px;letter-spacing:.22em;color:#4a5a4c;margin-bottom:14px}.preview-card[data-theme="dark"] .preview-kicker{color:#b7c6b2}.preview-title-row{display:flex;gap:12px;align-items:center;margin-bottom:15px}.preview-title-row .icon-preview{width:46px;height:46px;border-radius:2px;border-color:#cfc8b4;background:#ece7d7;color:#a3483a}.preview-card h3{font-family:"Noto Serif SC","Songti SC",serif;font-size:22px;line-height:1.4;letter-spacing:.06em;margin:0}.preview-card p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.95;color:#4a5a4c;margin:0}.preview-card[data-theme="dark"] p{color:#b7c6b2}.preview-foot{height:1px;background:#cfc8b4;margin:18px 0 14px}.preview-card[data-theme="dark"] .preview-foot{background:#3d5945}.preview-action{height:38px;border-radius:2px;background:#2f4536;display:flex;align-items:center;justify-content:center;color:#f7f3e6;font-family:"Noto Serif SC","Songti SC",serif;font-size:12px;letter-spacing:.1em}.preview-card[data-theme="dark"] .preview-action{background:#a9c79b;color:#16211a}.tip{font-size:12px;line-height:1.8;color:var(--muted);margin:14px 2px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,15px);opacity:0;pointer-events:none;padding:12px 18px;border-radius:999px;background:#263d2c;color:#f5f7ed;font-size:12px;box-shadow:0 12px 30px #13231830;transition:transform var(--dur-mid,240ms) var(--ease),opacity var(--dur-mid,240ms) var(--ease);z-index:10000}.toast.show{opacity:1;transform:translate(-50%,0)}
+.back:focus-visible,.plain-btn:focus-visible,.file-label:focus-visible,.remove:focus-visible,.primary:focus-visible,.secondary:focus-visible,.input:focus-visible,.textarea:focus-visible{outline:3px solid #91b582;outline-offset:2px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.preview-stage{min-height:300px}.page{padding:24px 15px 45px}.topbar{padding-right:62px}.panel-head,.settings{padding-left:20px;padding-right:20px}.preview-head,.preview-body{padding-left:18px;padding-right:18px}}@media(max-width:440px){.topbar{align-items:flex-start}.back{font-size:12px;padding:8px 10px}.style-grid{gap:8px}.icon-row{grid-template-columns:50px 1fr}.icon-preview{width:50px;height:50px}.icon-row>.remove{grid-column:2;justify-self:start;padding-left:0}.actions>*{flex:1}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar"><div class="brand"><small>寻归荒野 · SITE CONFIGURATION</small><h1>全局公告设置</h1></div><a class="back" href="./index.html">← 返回游戏首页</a></header>
+  <div class="layout">
+    <main class="panel">
+      <div class="panel-head"><h2>公告模块</h2><p>设置进入《寻归荒野》时展示的公告内容与外观。默认配置已按你提供的文案、浅色风格及图片图标预置。</p></div>
+      <form class="settings" id="settings-form">
+        <section class="section"><div class="section-title"><div><h3>模块主开关</h3><span class="desc">控制进入网站时是否自动弹出全局公告</span></div><input class="switch" type="checkbox" id="enabled" role="switch" checked aria-label="启用公告弹窗"></div></section>
+        <section class="section"><div class="section-title"><div><h3>选择公告风格</h3><span class="desc">切换公告的浅色或深色显示方式</span></div></div>
+          <div class="style-grid"><button type="button" class="style-card" data-theme-choice="light" aria-pressed="true"><span class="mini light"><b>温馨提醒</b><i>在国师模拟器（宦海）的基础上……</i></span><span class="style-label">浅色模式</span><small>柔和的自然浅色背景</small></button><button type="button" class="style-card" data-theme-choice="dark" aria-pressed="false"><span class="mini dark"><b>温馨提醒</b><i>在国师模拟器（宦海）的基础上……</i></span><span class="style-label">深色模式</span><small>适合夜间阅读的深色背景</small></button></div>
+        </section>
+        <section class="section"><div class="section-title"><div><h3>显示图标</h3><span class="desc">在公告左上角显示图片或默认喇叭图标</span></div><input class="switch" type="checkbox" id="show-icon" role="switch" checked aria-label="显示公告图标"></div>
+          <div class="icon-row"><div class="icon-preview" id="icon-preview">📣</div><div><div class="icon-actions"><label class="file-label" for="icon-upload">选择 / 更换图标</label><input type="file" id="icon-upload" accept="image/*" hidden><button type="button" class="plain-btn" id="restore-image">恢复预置图片</button></div><span class="desc" id="icon-caption">已使用预置图片</span></div><button type="button" class="remove" id="remove-icon">移除自定义图标</button></div>
+        </section>
+        <section class="section"><label class="field-label" for="announcement-title">公告标题</label><input class="input" id="announcement-title" maxlength="80" value="温馨提醒" placeholder="请输入公告标题"><span class="desc">建议简短清晰，例如“温馨提醒”。</span></section>
+        <section class="section"><label class="field-label" for="announcement-content">公告内容</label><textarea class="textarea" id="announcement-content" maxlength="5000" placeholder="请输入公告正文"></textarea><div class="count" id="content-count">0 / 5000</div></section>
+        <section class="section"><label class="field-label" for="admin-token">管理员口令</label><input class="input" id="admin-token" type="password" autocomplete="current-password" placeholder="输入 Netlify 环境变量 ANNOUNCEMENT_ADMIN_TOKEN 的值"><span class="desc">口令只用于本次保存请求，不会写进公告内容或浏览器保存配置。请先在 Netlify 项目环境变量中设置同名变量。</span></section>
+        <div class="actions"><button type="submit" class="primary">保存到全站</button><button type="button" class="secondary" id="reset-settings">恢复默认设置</button><button type="button" class="secondary" id="open-preview">预览弹窗</button></div>
+        <div class="notice"><strong>全站同步状态：</strong><span id="sync-state">正在连接全局公告存储……</span><br>成功部署 Netlify Function 并设置管理员口令后，保存会更新所有访客看到的公告。若接口尚未部署，页面会退回本机预览模式，不会假称已同步到全站。</div>
+      </form>
+    </main>
+    <aside class="panel"><div class="preview-head"><h2>实时预览</h2><span class="status" id="status">已启用</span></div><div class="preview-body"><div class="preview-stage" id="preview-stage"><div class="preview-card" id="preview-card" data-theme="light"><div class="preview-kicker">寻归荒野 · 游玩前的话</div><div class="preview-title-row" id="preview-title-row"><div class="icon-preview" id="preview-icon">📣</div><h3 id="preview-title">温馨提醒</h3></div><p id="preview-content"></p><div class="preview-foot"></div><div class="preview-action">我知道了，进入游戏</div></div></div><p class="tip">左侧每次调整都会同步更新预览。预览中的按钮仅展示外观；“预览弹窗”可查看正式弹窗层的实际效果。</p></div></aside>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="announce-overlay" id="preview-modal" hidden><section class="announce-dialog" data-theme="light" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button class="announce-close" id="preview-close-x" type="button" aria-label="关闭公告预览">×</button><div class="announce-head" id="modal-head"><div class="announce-icon">📣</div><div><p class="announce-eyebrow">寻归荒野 · 游玩前的话</p><h2 class="announce-title" id="modal-title">温馨提醒</h2></div></div><div class="announce-content" id="modal-content"></div><div class="announce-divider"></div><div class="announce-foot"><span class="announce-footnote">感谢你打开这份历史档案。</span><button class="announce-confirm" id="preview-close" type="button">我知道了，返回设置</button></div></section></div>
+<script src="./assets/announcement.js"></script>
+<script src="./assets/music-player.js" defer></script>
+<script>
+(() => {
+  const M = window.AnnouncementModule;
+  let config = M.load();
+  let globalAvailable = false;
+  const $ = id => document.getElementById(id);
+  const enabled = $('enabled'), showIcon = $('show-icon'), title = $('announcement-title'), content = $('announcement-content');
+  const iconUpload = $('icon-upload');
+  const adminToken = $('admin-token');
+  function toast(msg) { const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),2600); }
+  function capture() { config={...config,enabled:enabled.checked,showIcon:showIcon.checked,title:title.value.trim() || '温馨提醒',content:content.value,theme:document.querySelector('[data-theme-choice][aria-pressed="true"]')?.dataset.themeChoice || 'light'}; }
+  function iconElement(target, sizeClass='') { target.innerHTML=''; if(config.showIcon && config.icon) { const img=document.createElement('img'); img.src=config.icon; img.alt='公告图标'; target.appendChild(img); } else if(config.showIcon) { target.textContent='📣'; } else { target.textContent=''; } target.style.display=config.showIcon?'grid':'none'; }
+  function draw() {
+    capture();
+    document.querySelectorAll('[data-theme-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.themeChoice===config.theme)));
+    $('status').textContent=config.enabled?'已启用':'已关闭'; $('status').classList.toggle('off',!config.enabled);
+    $('preview-stage').classList.toggle('dark',config.theme==='dark'); $('preview-card').dataset.theme=config.theme;
+    $('preview-title').textContent=config.title || '温馨提醒'; $('preview-content').textContent=config.content;
+    $('content-count').textContent=`${content.value.length} / 5000`;
+    iconElement($('icon-preview')); iconElement($('preview-icon'));
+    $('preview-title-row').style.gap=config.showIcon?'11px':'0';
+    $('preview-title-row').style.justifyContent=config.showIcon?'flex-start':'flex-start';
+    $('preview-title').style.marginLeft=config.showIcon?'0':'0';
+    $('icon-caption').textContent=config.icon ? (config.icon.startsWith('data:')?'已上传自定义图片':'已使用预置图片') : '未设置自定义图片，将显示默认喇叭图标';
+  }
+  let previewLastFocus = null;
+  function closePreview() {
+    const modal = $('preview-modal');
+    if (modal.hidden) return;
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    if (previewLastFocus && previewLastFocus.focus) { try { previewLastFocus.focus({ preventScroll: true }); } catch (_) {} }
+  }
+  function modalPreview() {
+    capture(); const modal=$('preview-modal'), dialog=modal.querySelector('.announce-dialog'); dialog.dataset.theme=config.theme;
+    const head=$('modal-head'); head.innerHTML='';
+    if(config.showIcon) { const icon=document.createElement('div'); icon.className='announce-icon'; if(config.icon){const img=document.createElement('img'); img.src=config.icon; img.alt='公告图标'; icon.appendChild(img);} else icon.textContent='📣'; head.appendChild(icon); }
+    const wrapper=document.createElement('div'); const eyebrow=document.createElement('p'); eyebrow.className='announce-eyebrow'; eyebrow.textContent='寻归荒野 · 游玩前的话'; const h=document.createElement('h2');h.className='announce-title';h.id='modal-title';h.textContent=config.title||'温馨提醒';wrapper.append(eyebrow,h);head.appendChild(wrapper);
+    previewLastFocus = document.activeElement;
+    $('modal-content').textContent=config.content; modal.hidden=false; document.body.style.overflow='hidden'; $('preview-close').focus();
+  }
+  async function optimizeImage(file) {
+    return new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onerror=reject; reader.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{const max=440,scale=Math.min(1,max/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',.82));};img.src=reader.result;};reader.readAsDataURL(file);});
+  }
+  enabled.addEventListener('change',draw); showIcon.addEventListener('change',draw); title.addEventListener('input',draw); content.addEventListener('input',draw);
+  document.querySelectorAll('[data-theme-choice]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-theme-choice]').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');config.theme=b.dataset.themeChoice;draw();}));
+  iconUpload.addEventListener('change',async()=>{const file=iconUpload.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){toast('请选择图片文件');return;}try{config.icon=await optimizeImage(file);draw();toast('图标已更新，记得保存设置');}catch(e){toast('图片读取失败，请换一张图片');}finally{iconUpload.value='';}});
+  $('remove-icon').addEventListener('click',()=>{config.icon=null;draw();toast('已移除自定义图标');});
+  $('restore-image').addEventListener('click',()=>{config.icon=M.DEFAULT.icon;draw();toast('已恢复预置图片');});
+  $('settings-form').addEventListener('submit',async e=>{e.preventDefault();capture();M.save(config);try{await M.saveGlobal(config,adminToken.value.trim());globalAvailable=true;$('sync-state').textContent='已连接并成功写入全局公告存储；所有访客将在下次进入时看到新配置。';toast('公告设置已同步到全站');}catch(err){globalAvailable=false;$('sync-state').textContent='尚未完成全站同步：'+err.message+'。当前浏览器保留了本地预览配置。';toast('全站保存失败；当前设置仅保存在本机');}});
+  $('reset-settings').addEventListener('click',()=>{config=M.reset();enabled.checked=config.enabled;showIcon.checked=config.showIcon;title.value=config.title;content.value=config.content;draw();toast('已恢复默认值，请点击“保存设置”以重新保存');});
+  $('open-preview').addEventListener('click',modalPreview); $('preview-close').addEventListener('click',closePreview); $('preview-close-x').addEventListener('click',closePreview);
+  $('preview-modal').addEventListener('click',e=>{if(e.target===$('preview-modal'))closePreview();});
+  document.addEventListener('keydown',e=>{
+    const modal=$('preview-modal'); if(modal.hidden) return;
+    if(e.key==='Escape'){ e.preventDefault(); closePreview(); return; }
+    if(e.key!=='Tab') return;
+    const f=Array.prototype.slice.call(modal.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'));
+    if(!f.length) return;
+    const first=f[0], last=f[f.length-1];
+    if(e.shiftKey && (document.activeElement===first || !modal.contains(document.activeElement))){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && (document.activeElement===last || !modal.contains(document.activeElement))){ e.preventDefault(); first.focus(); }
+  });
+  function applyConfig(next){config={...M.DEFAULT,...next};enabled.checked=!!config.enabled;showIcon.checked=!!config.showIcon;title.value=config.title||'温馨提醒';content.value=config.content||'';document.querySelectorAll('[data-theme-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.themeChoice===config.theme)));draw();}
+  async function initialize(){applyConfig(M.load());try{const globalConfig=await M.getGlobal();applyConfig(globalConfig);globalAvailable=true;$('sync-state').textContent='已连接全局公告存储。保存时会同步到所有访客。';}catch(_){globalAvailable=false;$('sync-state').textContent='全局接口尚未连接；当前可预览并在本机保存。部署 Netlify Function 后即可同步到全站。';}}
+  initialize();
+})();
+</script>
+</body></html>

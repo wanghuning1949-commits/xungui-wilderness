@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="寻归荒野">
+  <defs>
+    <clipPath id="xg-favicon-clip"><rect width="64" height="64" rx="14"/></clipPath>
+  </defs>
+  <g clip-path="url(#xg-favicon-clip)">
+    <rect width="64" height="64" fill="#3f6247"/>
+    <circle cx="45" cy="17.5" r="6.5" fill="#f1f3e9"/>
+    <path d="M-2 50 L18 22 L31 41 L40 28 L66 50 Z" fill="#f1f3e9"/>
+    <path d="M-2 58 L16 40 L30 54 L42 44 L66 58 Z" fill="#25402c"/>
+  </g>
+</svg>
